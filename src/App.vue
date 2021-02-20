@@ -1,15 +1,3 @@
 <template>
-  <h2>cnode + vite</h2>
+  <router-view />
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  name: 'App',
-})
-</script>
-
-<style>
-
-</style>
