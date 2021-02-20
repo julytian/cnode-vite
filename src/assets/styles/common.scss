@@ -1,0 +1,13 @@
+body {
+  height: 100%;
+  width: 100%;
+  font-size: 14px;
+  color: $color31;
+  line-height: 1;
+}
+
+.text-overflow {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
