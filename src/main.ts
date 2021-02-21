@@ -11,6 +11,7 @@ createApp(App)
   .use(router)
   .use(store)
   .use(Lazyload, {
+    preload: 1.5,
     lazyComponent: true,
   })
   .mount('#app')
