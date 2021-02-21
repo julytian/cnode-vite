@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, onMounted, ref, watch } from 'vue';
 import NavHeader from '@/components/nav-header.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Toast, Tab, Tabs, Empty } from 'vant';
@@ -80,6 +80,12 @@ export default defineComponent({
       const res = await apiGetUserInfo<IUserInfo>(loginname);
       user.value = res;
     };
+    watch(() => route.params, () => {
+      const loginname = route.params?.loginname as string;
+      if (loginname) {
+        getUserInfo()
+      }
+    });
     return {
       activeName,
       user,
