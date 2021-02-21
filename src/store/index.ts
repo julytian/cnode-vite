@@ -1,7 +1,12 @@
 import { createStore } from 'vuex'
+import topics from './modules/topics'
 
-export default createStore({
-  mutations: {},
-  actions: {},
-  modules: {}
+export interface IGlobalState {
+  topics: ITopicsState,
+}
+
+export default createStore<IGlobalState>({
+  modules: {
+    topics,
+  }
 })
