@@ -1,15 +1,44 @@
 <template>
   <div class="user-info">
-    <div class="btn-login">登录</div>
+    <div v-if="!userInfo.loginname" class="btn-login" @click="goLogin">
+      登录
+    </div>
+    <div v-else class="d-flex align-items-center" @click="goUser">
+      <img class="user-avatar" v-lazy="userInfo.avatar_url" />
+      <span
+        class="flex-1 text-ellipsis username"
+        v-text="userInfo.loginname"
+      ></span>
+      <img class="icon-next" src="../assets/images/go_next_icon.png" alt="" />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { IGlobalState } from '@/store';
+import { computed, defineComponent } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'NavUser',
-
+  setup() {
+    const store = useStore<IGlobalState>();
+    const router = useRouter();
+    const route = useRoute();
+    const userInfo = computed(() => store.state.user.userInfo);
+    const goLogin = () => {
+      router.push(`/login?redirect=${encodeURIComponent(route.path)}`);
+    };
+    const goUser = () => {
+      router.push(`/user/${userInfo.value.loginname}`);
+    };
+    return {
+      userInfo,
+      goLogin,
+      goUser,
+    };
+  },
 });
 </script>
 
@@ -29,9 +58,25 @@ export default defineComponent({
     display: inline-block;
     width: 24px;
     height: 24px;
-    background: url("@/assets/images/login_icon.png") no-repeat left center;
+    background: url('@/assets/images/login_icon.png') no-repeat left center;
     background-size: 100%;
     margin-right: $gap * 2;
   }
+}
+.user-avatar {
+  display: block;
+  width: 40px;
+  height: 40px;
+  background-color: $light;
+  border-radius: 20px;
+}
+.username {
+  margin-left: $gap * 2;
+  width: 85px;
+  font-size: $font-info;
+}
+.icon-next {
+  width: 6px;
+  height: 10px;
 }
 </style>
