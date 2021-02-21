@@ -14,7 +14,7 @@ export function getLastTimeStr(time: string, friendly: boolean) {
   if (friendly) {
     return dayjs(time).fromNow();
   }
-  return dayjs(time, 'yyyy-MM-dd hh:mm');
+  return dayjs(new Date(time)).format('YYYY-MM-DD HH:mm');
 }
 
 
