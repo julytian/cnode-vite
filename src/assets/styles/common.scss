@@ -5,6 +5,9 @@ body {
   color: $color31;
   line-height: 1;
 }
+img {
+  max-width: 100%;
+}
 
 .d-flex {
   display: flex;
@@ -94,4 +97,9 @@ body {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+// skeleton
+.skeleton-top {
+  margin-top: 20px;
 }

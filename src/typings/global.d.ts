@@ -34,3 +34,33 @@ declare interface IApiGetTopics {
   limit: number;
   mdrender: boolean;
 }
+
+// 主题详情
+declare interface ITopicDetail {
+  id: string;
+  author_id: string;
+  tab: TTopicTab;
+  content: string;
+  title: string;
+  last_reply_at: string;
+  good: boolean;
+  top: boolean;
+  reply_count: number;
+  visit_count: number;
+  create_at: string;
+  author: IAuthor;
+  replies: ITopicReply[];
+  is_collect: boolean;
+}
+declare interface ITopicReply {
+  author: IAuthor;
+  content: string;
+  create_at: string;
+  id: string;
+  is_uped: boolean;
+  reply_id: unknown;
+  ups: string[];
+}
+declare interface ITopicDetailState {
+  topic: ITopicDetail;
+}

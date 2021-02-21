@@ -1,5 +1,5 @@
 <template>
-  <van-skeleton title avatar :row="10" :loading="skeletonLoading">
+  <van-skeleton title avatar :row="10" :loading="skeletonLoading" class="skeleton-top">
     <van-list
       v-model:loading="loading"
       :finished="finished"
@@ -62,7 +62,7 @@ export default defineComponent({
     };
     const goDetail = (item: ITopic) => {
       router.push(`/topic/${item.id}`);
-      // store.dispatch(`topic/${Types.SET_TOPIC_DETAIL}`, item.id);
+      store.dispatch(`topic/${Types.SET_TOPIC_DETAIL}`, item.id);
     };
     return {
       skeletonLoading,
