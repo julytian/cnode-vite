@@ -5,8 +5,7 @@ import * as Types from '../action-types';
 
 const initialState: ITopicsState = {
   tab: 'all',
-  hasMore: true,
-  loading: false,
+  finished: false,
   limit: 20,
   page: 1,
   list: [],
@@ -16,30 +15,25 @@ const topics: Module<ITopicsState, IGlobalState> = {
   namespaced: true,
   state: initialState,
   mutations: {
-    [Types.SET_TOPICS_LOADING](state: ITopicsState, payload: boolean) {
-      state.loading = payload;
-    },
     [Types.SET_TOPICS_TAB](state: ITopicsState, payload: TTopicTab) {
       state.tab = payload;
     },
     [Types.SET_TOPICS_LIST](state: ITopicsState, payload: ITopic[]) {
       state.list = [...state.list, ...payload];
       state.page += 1;
-      state.hasMore = !!payload;
+      state.finished = !payload;
     },
     [Types.SET_TOPICS_INIT](state: ITopicsState) {
-      state.loading = false;
       state.page = 1;
-      state.hasMore = true;
+      state.finished = false;
       state.list = [];
     },
   },
   actions: {
     async [Types.SET_TOPICS_LIST]({ commit, state }) {
-      if (state.loading || !state.hasMore) {
+      if (state.finished) {
         return;
       }
-      commit(Types.SET_TOPICS_LOADING, true);
       try {
         const res = await apiGetTopics<ITopic[]>(
           state.page,
@@ -50,11 +44,9 @@ const topics: Module<ITopicsState, IGlobalState> = {
       } catch (error) {
         //
       }
-      commit(Types.SET_TOPICS_LOADING, false);
     },
     async [Types.SET_TOPICS_INIT]({ commit, state }) {
       commit(Types.SET_TOPICS_INIT);
-      commit(Types.SET_TOPICS_LOADING, true);
       try {
         const res = await apiGetTopics<ITopic[]>(
           state.page,
@@ -65,7 +57,6 @@ const topics: Module<ITopicsState, IGlobalState> = {
       } catch (error) {
         //
       }
-      commit(Types.SET_TOPICS_LOADING, false);
     },
   },
 };

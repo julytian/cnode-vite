@@ -1,13 +1,13 @@
 <template>
-  <van-skeleton title avatar :row="10" :loading="skeletonLoading" style="margin-top: 10px">
+  <van-skeleton title avatar :row="10" :loading="skeletonLoading">
     <van-list
       v-model:loading="loading"
-      :finished="!hasMore"
+      :finished="finished"
       finished-text="没有更多了"
       @load="onLoad"
     >
       <template v-for="topic in topics" :key="topic.id">
-        <topic-item :topic="topic"></topic-item>
+        <topic-item :topic="topic" @click="goDetail(topic)"></topic-item>
       </template>
     </van-list>
   </van-skeleton>
@@ -34,8 +34,8 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const topics = computed(() => store.state.topics.list);
-    const hasMore = computed(() => store.state.topics.hasMore);
-    const loading = computed(() => store.state.topics.loading);
+    const finished = computed(() => store.state.topics.finished);
+    const loading = ref(false);
     const skeletonLoading = ref(true);
     watch(
       () => route.query,
@@ -49,20 +49,28 @@ export default defineComponent({
       }
     );
     onMounted(async () => {
-      await store.dispatch(`topics/${Types.SET_TOPICS_INIT}`);
+      if (topics.value.length === 0) {
+        await store.dispatch(`topics/${Types.SET_TOPICS_INIT}`);
+      }
       skeletonLoading.value = false;
     });
-    const onLoad = () => {
-      if (hasMore.value) {
-        store.dispatch(`topics/${Types.SET_TOPICS_LIST}`);
+    const onLoad = async () => {
+      if (!finished.value) {
+        await store.dispatch(`topics/${Types.SET_TOPICS_LIST}`);
+        loading.value = false;
       }
+    };
+    const goDetail = (item: ITopic) => {
+      router.push(`/topic/${item.id}`);
+      // store.dispatch(`topic/${Types.SET_TOPIC_DETAIL}`, item.id);
     };
     return {
       skeletonLoading,
       topics,
-      hasMore,
+      finished,
       loading,
       onLoad,
+      goDetail,
     };
   },
 });

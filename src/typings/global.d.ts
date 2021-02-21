@@ -22,8 +22,7 @@ declare interface ITopic {
 
 declare interface ITopicsState {
   tab: TTopicTab;
-  hasMore: boolean;
-  loading: boolean;
+  finished: boolean;
   limit: number;
   page: number;
   list: ITopic[];
