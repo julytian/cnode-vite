@@ -1,8 +1,9 @@
 <template>
   <van-sticky>
     <header class="d-flex align-items-center justify-content-between navbar">
-      <div class="navbar-icon-menu" @click="toggleMenu"></div>
-      <div class="navbar-title" v-text="title"></div>
+      <div v-if="showMenu" class="navbar-icon-menu" @click="toggleMenu"></div>
+      <div v-else class="navbar-blank"></div>
+      <div class="flex-1 navbar-title" v-text="title"></div>
       <i class="iconfont navbar-icon-add">&#xe60f;</i>
     </header>
   </van-sticky>
@@ -28,6 +29,10 @@ export default defineComponent({
       type: String,
       default: '',
     },
+    showMenu: {
+      type: Boolean,
+      default: true,
+    }
   },
   setup() {
     const show = ref(false);
@@ -56,10 +61,14 @@ export default defineComponent({
 }
 .navbar-title {
   font-size: 16px;
+  text-align: center;
 }
 .navbar-icon-add {
   color: #42b983;
   padding: 5px 15px;
   border-radius: 5px;
+}
+.navbar-blank {
+  width: 49px;
 }
 </style>
