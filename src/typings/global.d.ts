@@ -62,5 +62,17 @@ declare interface ITopicReply {
   ups: string[];
 }
 declare interface ITopicDetailState {
-  topic: ITopicDetail;
+  [key: string]: any
+}
+
+declare interface IUser {
+  avatar_url: string;
+  loginname: string;
+  token: string;
+  userId: string;
+  id?: string;
+}
+
+declare interface IUserState {
+  userInfo: IUser
 }
