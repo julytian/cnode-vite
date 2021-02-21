@@ -17,19 +17,21 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "login" */ '../views/login/index.vue'),
   },
   {
-    path: '/message',
-    name: 'Message',
-    component: () => import(/* webpackChunkName: "message" */ '../views/message/index.vue'),
-  },
-  {
     path: '/topic/:id',
     name: 'Topic',
     component: () => import(/* webpackChunkName: "topic" */ '../views/topic/index.vue'),
   },
   {
-    path: '/user',
+    path: '/message',
+    name: 'Message',
+    component: () => import(/* webpackChunkName: "message" */ '../views/message/index.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/user/:loginname',
     name: 'User',
     component: () => import(/* webpackChunkName: "user" */ '../views/user/index.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/about',
