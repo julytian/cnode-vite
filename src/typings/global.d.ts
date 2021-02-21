@@ -76,3 +76,19 @@ declare interface IUser {
 declare interface IUserState {
   userInfo: IUser
 }
+
+interface IUserRecent {
+  id: string;
+  author: IAuthor;
+  title: string;
+  last_reply_at: string;
+}
+declare interface IUserInfo {
+  loginname: string;
+  avatar_url: string;
+  githubUsername?: string;
+  create_at: string;
+  score: number;
+  recent_topics: IUserRecent[];
+  recent_replies: IUserRecent[];
+}
