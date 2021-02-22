@@ -51,7 +51,7 @@ export default defineComponent({
   width: 30px;
   height: 30px;
   margin-right: $gap * 2;
-  border-radius: $gap * 2;
+  border-radius: 50%;
   background-color: $light;
 }
 .message-hd-title {

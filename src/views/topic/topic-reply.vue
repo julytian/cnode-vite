@@ -68,7 +68,7 @@ strong {
   width: $gap * 6;
   height: $gap * 6;
   margin-right: $gap * 2;
-  border-radius: $gap * 2;
+  border-radius: 50%;
   background-color: $light;
 }
 
