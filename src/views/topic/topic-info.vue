@@ -3,7 +3,7 @@
     <img v-if="topic.author" class="topic-info-avatar" v-lazy="topic.author.avatar_url" />
     <div class="flex-1">
       <span v-if="topic.author">{{ topic.author.loginname }}</span>
-      <time> 发布于:{{ getLastTimeStr(topic.create_at, true) }} </time>
+      <time> 发布于：{{ getLastTimeStr(topic.create_at, true) }} </time>
     </div>
     <div class="topic-info-wrap">
       <span
