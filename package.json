@@ -1,6 +1,7 @@
 {
   "name": "cnode-vite",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "homepage": "https://julytian.github.io/cnode-vite",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
