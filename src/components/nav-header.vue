@@ -1,7 +1,7 @@
 <template>
   <van-sticky>
     <header class="d-flex align-items-center justify-content-between navbar">
-      <div v-if="showMenu" class="navbar-icon-menu" @click="toggleMenu"></div>
+      <div v-if="showMenu" class="navbar-icon-menu" @click="showMenu"></div>
       <div v-else class="navbar-blank"></div>
       <div class="flex-1 navbar-title" v-text="title"></div>
       <router-link to="/add">
@@ -9,8 +9,8 @@
       </router-link>
     </header>
   </van-sticky>
-  <van-popup v-model:show="show" position="left">
-    <nav-menu @toggle-menu="toggleMenu"></nav-menu>
+  <van-popup v-model:show="show" position="left" teleport="body">
+    <nav-menu @hide-menu="show=false"></nav-menu>
   </van-popup>
 </template>
 
@@ -38,12 +38,12 @@ export default defineComponent({
   },
   setup() {
     const show = ref(false);
-    const toggleMenu = () => {
-      show.value = !show.value;
+    const showMenu = () => {
+      show.value = true;
     };
     return {
       show,
-      toggleMenu,
+      showMenu,
     };
   },
 });

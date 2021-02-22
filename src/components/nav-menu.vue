@@ -54,11 +54,11 @@ export default defineComponent({
   components: {
     NavUser,
   },
-  emits: ['toggleMenu'],
+  emits: ['hideMenu'],
   setup(props, context) {
     const router = useRouter();
     const goPage = (url: string) => {
-      context.emit('toggleMenu');
+      context.emit('hideMenu');
       router.push(url);
     };
     return {
