@@ -54,6 +54,10 @@ export const getTabInfo = (
         str = '招聘';
         className = 'job';
         break;
+      case 'dev':
+        str = '测试';
+        className = 'test';
+        break;
       default:
         str = '暂无';
         className = 'default';

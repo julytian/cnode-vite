@@ -4,6 +4,7 @@ interface ITabs {
   share: string;
   ask: string;
   job: string;
+  dev: string;
 }
 export const tabs: ITabs = {
   all: '全部',
@@ -11,4 +12,5 @@ export const tabs: ITabs = {
   share: '分享',
   ask: '问答',
   job: '招聘',
+  dev: '测试',
 }
