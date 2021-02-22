@@ -8,7 +8,7 @@
         <img class="reply-avatar" v-lazy="item.author.avatar_url" />
         <div class="d-flex align-items-center flex-1">
           <div class="flex-1 reply-info-content">
-            {{ item.author.loginname }} 发布于:{{
+            {{ item.author.loginname }} 发布于：{{
               getLastTimeStr(item.create_at, true)
             }}
           </div>
