@@ -1,4 +1,4 @@
-declare type TTopicTab = 'all' | 'share' | 'ask' | 'good' | 'job';
+declare type TTopicTab = 'all' | 'share' | 'ask' | 'good' | 'job' | 'dev';
 
 declare interface IAuthor {
   loginname: string;
@@ -62,7 +62,7 @@ declare interface ITopicReply {
   ups: string[];
 }
 declare interface ITopicDetailState {
-  [key: string]: any
+  [key: string]: any;
 }
 
 declare interface IUser {
@@ -74,7 +74,7 @@ declare interface IUser {
 }
 
 declare interface IUserState {
-  userInfo: IUser
+  userInfo: IUser;
 }
 
 interface IUserRecent {
@@ -113,4 +113,17 @@ declare interface IMessage {
   reply: IMessageReply;
   topic: IMessageTopic;
   type: string;
+}
+// 新建主题提交的参数
+declare interface IAddTopicParams {
+  accesstoken: string;
+  title: string;
+  tab: TTopicTab;
+  content: string;
+}
+
+declare interface IAddTopicResponse {
+  success: boolean;
+  error_msg?: string;
+  topic_id?: string;
 }
