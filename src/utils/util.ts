@@ -66,3 +66,8 @@ export const getTabInfo = (
   }
   return isClass ? className : str;
 };
+
+export const backTop = (num = 0) => {
+  document.body.scrollTop = num;
+  document.documentElement.scrollTop = num;
+};

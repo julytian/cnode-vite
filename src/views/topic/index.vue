@@ -16,6 +16,7 @@
       <van-skeleton title :row="5" class="skeleton-top"></van-skeleton>
     </template>
   </Suspense>
+  <back-top></back-top>
 </template>
 
 <script lang="ts">
@@ -36,6 +37,7 @@ export default defineComponent({
     NavHeader,
     TopicInfo,
     TopicReply: defineAsyncComponent(() => import(/* webpackChunkName: "topic-reply" */ './topic-reply.vue')),
+    BackTop: defineAsyncComponent(() => import(/* webpackChunkName: "backtop" */ '@/components/back-top.vue')),
   },
   setup() {
     const route = useRoute();

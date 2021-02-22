@@ -1,10 +1,11 @@
 <template>
   <nav-header></nav-header>
   <topic-list></topic-list>
+  <back-top></back-top>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, defineAsyncComponent } from 'vue';
 import NavHeader from '@/components/nav-header.vue'
 import TopicList from './topic-list.vue'
 
@@ -13,6 +14,7 @@ export default defineComponent({
   components: {
     NavHeader,
     TopicList,
+    BackTop: defineAsyncComponent(() => import(/* webpackChunkName: "backtop" */ '@/components/back-top.vue')),
   }
 });
 </script>
