@@ -92,3 +92,25 @@ declare interface IUserInfo {
   recent_topics: IUserRecent[];
   recent_replies: IUserRecent[];
 }
+
+// 消息
+interface IMessageReply {
+  content: string;
+  create_at: string;
+  id: string;
+  ups: any[];
+}
+interface IMessageTopic {
+  id: string;
+  last_reply_at: string;
+  title: string;
+}
+declare interface IMessage {
+  author: IAuthor;
+  create_at: string;
+  has_read: boolean;
+  id: string;
+  reply: IMessageReply;
+  topic: IMessageTopic;
+  type: string;
+}

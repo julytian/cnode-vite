@@ -26,7 +26,6 @@ import { useStore } from 'vuex';
 import NavHeader from '@/components/nav-header.vue';
 import * as Types from '@/store/action-types';
 import { IGlobalState } from '@/store';
-import "@/assets/styles/github-markdown.scss";
 
 import TopicInfo from './topic-info.vue';
 
