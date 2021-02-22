@@ -4,20 +4,20 @@
     <dt>关于项目</dt>
     <dd>该项目是基于Cnodejs的api，采用vue3+vite重写的webapp。</dd>
 
-    <!-- <dt>源码地址</dt>
+    <dt>源码地址</dt>
 
     <dd>
-      <a href="https://github.com/shinygang/Vue-cnodejs">
-        https://github.com/shinygang/Vue-cnodejs</a
+      <a href="https://github.com/julytian/cnode-vite.git">
+        https://github.com/julytian/cnode-vite.git</a
       >
     </dd>
 
     <dt>意见反馈</dt>
     <dd>
-      <a href="https://github.com/shinygang/Vue-cnodejs/issues">
+      <a href="https://github.com/julytian/cnode-vite/issues">
         发表意见或者提需求</a
       >
-    </dd> -->
+    </dd>
 
     <dt>当前版本</dt>
     <dd>V1.0</dd>
