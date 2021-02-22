@@ -28,6 +28,11 @@
         >招聘</a
       >
       <a
+        class="icon-tianjia iconfont nav-menu-item"
+        @click="goPage('/list?tab=dev')"
+        >测试</a
+      >
+      <a
         class="icon-xiaoxi iconfont nav-menu-item line"
         @click="goPage('/message')"
         >消息</a
