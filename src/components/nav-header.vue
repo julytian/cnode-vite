@@ -4,7 +4,9 @@
       <div v-if="showMenu" class="navbar-icon-menu" @click="toggleMenu"></div>
       <div v-else class="navbar-blank"></div>
       <div class="flex-1 navbar-title" v-text="title"></div>
-      <i class="iconfont navbar-icon-add">&#xe60f;</i>
+      <router-link to="/add">
+        <i class="iconfont navbar-icon-add">&#xe60f;</i>
+      </router-link>
     </header>
   </van-sticky>
   <van-popup v-model:show="show" position="left">
