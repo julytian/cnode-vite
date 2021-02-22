@@ -7,6 +7,7 @@ import vue from '@vitejs/plugin-vue'
 export default ({command}: ConfigEnv):UserConfig => {
   const isBuild = command === 'build';
   return {
+    base: isBuild ? '/cnode-vite': '/',
     plugins: [
       vue(),
     ],
