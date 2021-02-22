@@ -12,7 +12,7 @@ dayjs.locale('zh-cn'); // 使用本地化语言
  */
 export function getLastTimeStr(time: string, friendly: boolean) {
   if (friendly) {
-    return dayjs(time).fromNow();
+    return dayjs(time).fromNow().replace(' ', '');
   }
   return dayjs(new Date(time)).format('YYYY-MM-DD HH:mm');
 }
