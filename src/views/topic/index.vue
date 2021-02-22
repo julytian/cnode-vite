@@ -70,6 +70,8 @@ export default defineComponent({
             ImagePreview({
               images,
               startPosition: index,
+              closeable: true,
+              teleport: 'body'
             });
           });
         });
