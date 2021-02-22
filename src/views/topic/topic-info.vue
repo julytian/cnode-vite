@@ -87,6 +87,9 @@ export default defineComponent({
   &.share {
     background: #1abc9c;
   }
+  &.test {
+    background: #80bd01;
+  }
 }
 .topic-info-name {
   display: block;

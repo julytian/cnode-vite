@@ -84,6 +84,9 @@ h3 {
   &.share:before {
     background: #1abc9c;
   }
+  &.test:before {
+    background: #80bd01;
+  }
 }
 .content {
   padding-top: $gap;

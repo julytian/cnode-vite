@@ -50,6 +50,7 @@ export default defineComponent({
     );
     onMounted(async () => {
       if (topics.value.length === 0) {
+        store.commit(`topics/${Types.SET_TOPICS_TAB}`, route.query.tab || 'all');
         await store.dispatch(`topics/${Types.SET_TOPICS_INIT}`);
       }
       skeletonLoading.value = false;
