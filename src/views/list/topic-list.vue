@@ -35,12 +35,13 @@ export default defineComponent({
     const route = useRoute();
     const topics = computed(() => store.state.topics.list);
     const finished = computed(() => store.state.topics.finished);
+    const tab = computed(() => store.state.topics.tab);
     const loading = ref(false);
     const skeletonLoading = ref(true);
     watch(
       () => route.query,
       async (query) => {
-        if (query?.tab) {
+        if (query?.tab && query.tab !== tab.value) {
           skeletonLoading.value = true;
           store.commit(`topics/${Types.SET_TOPICS_TAB}`, query.tab);
           await store.dispatch(`topics/${Types.SET_TOPICS_INIT}`);
