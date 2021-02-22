@@ -2,6 +2,8 @@
   "name": "cnode-vite",
   "version": "1.0.0",
   "homepage": "https://julytian.github.io/cnode-vite",
+  "author": "julytian",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
