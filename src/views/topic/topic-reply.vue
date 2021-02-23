@@ -14,7 +14,8 @@
           </div>
           <span
             class="iconfont reply-icon"
-            :class="{ uped: item.ups.length > 0 }"
+            :class="{ uped: isUps(item) }"
+            @click="handleReplyUps(item)"
             >&#xe608;</span
           >
           <span class="reply-ups">{{ item.ups.length }}</span>
@@ -29,6 +30,16 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { getLastTimeStr } from '@/utils/util';
+import { useStore } from 'vuex';
+import { IGlobalState } from '@/store';
+import { Toast } from 'vant';
+import { useRoute, useRouter } from 'vue-router';
+import { apiHandleReplyUps } from '@/api/topic';
+
+interface IReplyUpsResponse {
+  success: boolean;
+  action: string;
+}
 
 export default defineComponent({
   name: 'TopicReply',
@@ -43,6 +54,39 @@ export default defineComponent({
     getLastTimeStr(time: string, friendly: boolean) {
       return getLastTimeStr(time, friendly);
     },
+  },
+  setup() {
+    const store = useStore<IGlobalState>();
+    const router = useRouter();
+    const route = useRoute();
+    const handleReplyUps = async (reply: ITopicReply) => {
+      const { token } = store.state.user.userInfo;
+      if (!token) {
+        Toast('你还没登录~~');
+        router.push(`/login?redirect=${encodeURIComponent(route.path)}`);
+        return;
+      }
+      try {
+        const res = await apiHandleReplyUps<IReplyUpsResponse>(token, reply.id);
+        const { userId } = store.state.user.userInfo;
+        if (res.action === 'down') {
+          const index = reply.ups.findIndex((i) => i === userId);
+          reply.ups.splice(index, 1);
+        } else {
+          reply.ups.push(userId);
+        }
+      } catch (error) {
+        Toast('点赞失败');
+      }
+    };
+    const isUps = (reply: ITopicReply) => {
+      const { userId } = store.state.user.userInfo;
+      return reply.ups.findIndex((i) => i === userId) >= 0;
+    };
+    return {
+      handleReplyUps,
+      isUps,
+    };
   },
 });
 </script>
@@ -77,6 +121,9 @@ strong {
 }
 .reply-icon {
   font-size: 26px;
+  &.uped {
+    color: $color01;
+  }
 }
 .reply-content {
   padding: 0 $gap * 3;
