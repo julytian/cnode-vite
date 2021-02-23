@@ -6,12 +6,12 @@ import axios from './axios';
  * 获取主题详情
  * @param id 主题id
  */
-export function apiGetTopicDetail<T>(id: string) {
+export function apiGetTopicDetail<T>(id: string, mdrender = true) {
   const store = useStore<IGlobalState>();
   const token = store.state.user.userInfo.token;
-  let url = `/topic/${id}`;
+  let url = `/topic/${id}?mdrender=${mdrender}`;
   if (token) {
-    url += `?accesstoken=${token}`;
+    url += `&accesstoken=${token}`;
   }
   return axios.get<T, T>(url);
 }

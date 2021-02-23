@@ -119,6 +119,7 @@ declare interface IAddTopicParams {
   title: string;
   tab: TTopicTab;
   content: string;
+  topic_id?: string;
 }
 
 declare interface IAddTopicResponse {
