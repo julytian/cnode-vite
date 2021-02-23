@@ -36,6 +36,17 @@
         </template>
       </template>
     </van-tab>
+    <van-tab title="用户收藏" name="collects">
+      <van-empty
+        v-if="collects && collects.length === 0"
+        description="暂无数据"
+      />
+      <template v-else>
+        <template v-for="item in collects" :key="item.id">
+          <recent-item :item="item"></recent-item>
+        </template>
+      </template>
+    </van-tab>
   </van-tabs>
 </template>
 
@@ -44,7 +55,7 @@ import { defineComponent, onMounted, ref, watch } from 'vue';
 import NavHeader from '@/components/nav-header.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Toast, Tab, Tabs, Empty } from 'vant';
-import { apiGetUserInfo } from '@/api/user';
+import { apiGetTopicCollect, apiGetUserInfo } from '@/api/user';
 import { getLastTimeStr } from '@/utils/util';
 import RecentItem from './recent-item.vue';
 
@@ -66,10 +77,23 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
     const user = ref({});
+    const collects = ref({});
     const activeName = ref('replies');
     onMounted(() => {
       getUserInfo();
+      getTopicCollect();
     });
+    const getTopicCollect = async () => {
+      const loginname = route.params?.loginname as string;
+      if (!loginname) {
+        Toast('缺少用户名参数');
+        router.replace('/');
+        return;
+      }
+      const res = await apiGetTopicCollect<ITopic>(loginname);
+      console.log('collect', res);
+      collects.value = res;
+    };
     const getUserInfo = async () => {
       const loginname = route.params?.loginname as string;
       if (!loginname) {
@@ -80,15 +104,20 @@ export default defineComponent({
       const res = await apiGetUserInfo<IUserInfo>(loginname);
       user.value = res;
     };
-    watch(() => route.params, () => {
-      const loginname = route.params?.loginname as string;
-      if (loginname) {
-        getUserInfo()
+    watch(
+      () => route.params,
+      () => {
+        const loginname = route.params?.loginname as string;
+        if (loginname) {
+          getUserInfo();
+          getTopicCollect();
+        }
       }
-    });
+    );
     return {
       activeName,
       user,
+      collects,
     };
   },
 });
