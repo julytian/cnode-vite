@@ -1,1 +1,0 @@
-import{y as r}from"./index.f8c1ba6c.js";var a={to:[String,Object],url:String,replace:Boolean};function o(r){var a=r.$router,o=r.to,e=r.url,t=r.replace;o&&a?a[t?"replace":"push"](o):e&&(t?location.replace(e):location.href=e)}function e(){var a=r().proxy;return function(){o(a)}}export{a,o as r,e as u};
