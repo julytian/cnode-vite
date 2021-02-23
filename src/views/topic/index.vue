@@ -25,7 +25,7 @@ import {
   defineAsyncComponent,
   defineComponent,
   nextTick,
-  onMounted,
+  onActivated,
 } from 'vue';
 import { Skeleton, ImagePreview } from 'vant';
 import { useRoute } from 'vue-router';
@@ -35,6 +35,28 @@ import * as Types from '@/store/action-types';
 import { IGlobalState } from '@/store';
 
 import TopicInfo from './topic-info.vue';
+
+function previewImage() {
+  nextTick(() => {
+    const imgs = document.querySelectorAll('.markdown-body img');
+    const images: string[] = [];
+    imgs.forEach((img, index) => {
+      let url = img.getAttribute('src') as string;
+      if (!url.startsWith('http')) {
+        url = `https:${url}`;
+      }
+      images.push(url);
+      img.addEventListener('click', () => {
+        ImagePreview({
+          images,
+          startPosition: index,
+          closeable: true,
+          teleport: 'body',
+        });
+      });
+    });
+  });
+}
 
 export default defineComponent({
   name: 'TopicPage',
@@ -54,37 +76,14 @@ export default defineComponent({
     const route = useRoute();
     const store = useStore<IGlobalState>();
     const topic = computed(() => store.state.topic.topic);
-    const previewImage = () => {
-      nextTick(() => {
-        const imgs = document.querySelectorAll('.markdown-body img');
-        const images: string[] = [];
-        imgs.forEach((img, index) => {
-          let url = img.getAttribute('src') as string;
-          if (!url.startsWith('http')) {
-            url = `https:${url}`;
-          }
-          images.push(url);
-          img.addEventListener('click', () => {
-            ImagePreview({
-              images,
-              startPosition: index,
-              closeable: true,
-              teleport: 'body',
-            });
-          });
-        });
-      });
-    };
-    onMounted(async () => {
+    onActivated(async () => {
       if (!topic.value.id) {
         await store.dispatch(
           `topic/${Types.SET_TOPIC_DETAIL}`,
           route.params?.id
         );
-        previewImage();
-      } else {
-        previewImage();
       }
+      previewImage();
     });
     return {
       topic,
