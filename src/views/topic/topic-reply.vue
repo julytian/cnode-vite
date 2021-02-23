@@ -79,15 +79,12 @@ export default defineComponent({
     const route = useRoute();
     const curReplyId = ref('');
     const { token, userId } = store.state.user.userInfo;
-    const handleLogin = () => {
+    const handleReplyUps = async (reply: ITopicReply) => {
       if (!token) {
         Toast('你还没登录~~');
         router.push(`/login?redirect=${encodeURIComponent(route.path)}`);
         return;
       }
-    }
-    const handleReplyUps = async (reply: ITopicReply) => {
-      handleLogin();
       try {
         const res = await apiHandleReplyUps<IReplyUpsResponse>(token, reply.id);
         if (res.action === 'down') {
@@ -112,7 +109,11 @@ export default defineComponent({
       } else {
         curReplyId.value = id;
       }
-      handleLogin();
+      if (!token) {
+        Toast('你还没登录~~');
+        router.push(`/login?redirect=${encodeURIComponent(route.path)}`);
+        return;
+      }
     };
     return {
       handleReplyUps,
