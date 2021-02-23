@@ -91,7 +91,6 @@ export default defineComponent({
         return;
       }
       const res = await apiGetTopicCollect<ITopic>(loginname);
-      console.log('collect', res);
       collects.value = res;
     };
     const getUserInfo = async () => {
