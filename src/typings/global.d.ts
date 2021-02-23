@@ -1,5 +1,4 @@
 declare type TTopicTab = 'all' | 'share' | 'ask' | 'good' | 'job' | 'dev';
-
 declare interface IAuthor {
   loginname: string;
   avatar_url: string;
@@ -58,7 +57,7 @@ declare interface ITopicReply {
   create_at: string;
   id: string;
   is_uped: boolean;
-  reply_id: unknown;
+  reply_id: string;
   ups: string[];
 }
 declare interface ITopicDetailState {
@@ -126,4 +125,17 @@ declare interface IAddTopicResponse {
   success: boolean;
   error_msg?: string;
   topic_id?: string;
+}
+
+// 新建评论参数
+declare interface IAddTopicRepliesParams {
+  accesstoken: string;
+  content: string;
+  reply_id?: string;
+  topic_id: string;
+}
+
+interface IAddTopicRepliesResponse {
+  success: boolean;
+  reply_id: string;
 }
