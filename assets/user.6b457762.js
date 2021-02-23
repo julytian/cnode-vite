@@ -1,0 +1,1 @@
+import{z as t}from"./index.f8c1ba6c.js";function c(c){return t.post("/accesstoken",{accesstoken:c})}function e(c){return t.get(`/user/${c}`)}function n(c){return t.get(`/topic_collect/${c}`)}export{c as a,n as b,e as c};
