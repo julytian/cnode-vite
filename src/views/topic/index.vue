@@ -1,5 +1,5 @@
 <template>
-  <nav-header title="主题">
+  <nav-header title="主题" :topic-id="isSelf ? topic.id :''">
     <template v-if="token" #collect>
       <van-icon
         name="like"
@@ -88,12 +88,13 @@ export default defineComponent({
     const store = useStore<IGlobalState>();
     const topic = computed(() => store.state.topic.topic);
     const token = computed(() => store.state.user.userInfo.token);
+    const isSelf = computed(() => store.state.topic.topic.author_id === store.state.user.userInfo.userId);
     onActivated(async () => {
       const id = route.params.id as string;
       if (!topic.value.id || (topic.value.id !== id)) {
         await store.dispatch(
           `topic/${Types.SET_TOPIC_DETAIL}`,
-          id
+          { id }
         );
       }
       previewImage();
@@ -116,6 +117,7 @@ export default defineComponent({
       topic,
       token,
       toggleCollect,
+      isSelf,
     };
   },
 });
@@ -134,5 +136,8 @@ export default defineComponent({
 .topic-content {
   padding: $gap * 3;
   background: $white;
+}
+.icon-font {
+  margin-right: $gap * 3;
 }
 </style>
