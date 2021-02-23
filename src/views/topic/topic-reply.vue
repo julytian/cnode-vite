@@ -1,5 +1,5 @@
 <template>
-  <h3 class="topic-reply van-hairline--bottom" v-if="topic.reply_count >= 0">
+  <h3 class="topic-reply van-hairline--bottom van-hairline--top" v-if="topic.reply_count >= 0">
     <strong>{{ topic.reply_count }}</strong> 回复
   </h3>
   <section class="reply-list">
@@ -19,22 +19,37 @@
             >&#xe608;</span
           >
           <span class="reply-ups">{{ item.ups.length }}</span>
-          <span class="iconfont reply-icon">&#xe609;</span>
+          <span class="iconfont reply-icon" @click="addReply(item.id)"
+            >&#xe609;</span
+          >
         </div>
       </div>
       <div class="markdown-body reply-content" v-html="item.content"></div>
+      <template v-if="userId && curReplyId === item.id">
+        <reply
+          v-model:topic="topic"
+          :reply-id="item.id"
+          :reply-to="item.author.loginname"
+          :show="!!curReplyId"
+          @hide-item-reply="hideItemReply"
+        ></reply>
+      </template>
+    </template>
+    <template v-if="topic.id && userId">
+      <reply v-model:topic="topic" :key="Math.random()"></reply>
     </template>
   </section>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType, ref } from 'vue';
 import { getLastTimeStr } from '@/utils/util';
 import { useStore } from 'vuex';
 import { IGlobalState } from '@/store';
 import { Toast } from 'vant';
 import { useRoute, useRouter } from 'vue-router';
 import { apiHandleReplyUps } from '@/api/topic';
+import Reply from './reply.vue';
 
 interface IReplyUpsResponse {
   success: boolean;
@@ -50,6 +65,9 @@ export default defineComponent({
       required: true,
     },
   },
+  components: {
+    Reply,
+  },
   methods: {
     getLastTimeStr(time: string, friendly: boolean) {
       return getLastTimeStr(time, friendly);
@@ -59,16 +77,19 @@ export default defineComponent({
     const store = useStore<IGlobalState>();
     const router = useRouter();
     const route = useRoute();
-    const handleReplyUps = async (reply: ITopicReply) => {
-      const { token } = store.state.user.userInfo;
+    const curReplyId = ref('');
+    const { token, userId } = store.state.user.userInfo;
+    const handleLogin = () => {
       if (!token) {
         Toast('你还没登录~~');
         router.push(`/login?redirect=${encodeURIComponent(route.path)}`);
         return;
       }
+    }
+    const handleReplyUps = async (reply: ITopicReply) => {
+      handleLogin();
       try {
         const res = await apiHandleReplyUps<IReplyUpsResponse>(token, reply.id);
-        const { userId } = store.state.user.userInfo;
         if (res.action === 'down') {
           const index = reply.ups.findIndex((i) => i === userId);
           reply.ups.splice(index, 1);
@@ -80,12 +101,26 @@ export default defineComponent({
       }
     };
     const isUps = (reply: ITopicReply) => {
-      const { userId } = store.state.user.userInfo;
       return reply.ups.findIndex((i) => i === userId) >= 0;
+    };
+    const hideItemReply = () => {
+      curReplyId.value = '';
+    }
+    const addReply = (id: string) => {
+      if (id === curReplyId.value) {
+        hideItemReply()
+      } else {
+        curReplyId.value = id;
+      }
+      handleLogin();
     };
     return {
       handleReplyUps,
       isUps,
+      userId,
+      curReplyId,
+      addReply,
+      hideItemReply,
     };
   },
 });
