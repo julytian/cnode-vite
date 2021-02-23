@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue';
+import { computed, defineComponent, PropType, ref } from 'vue';
 import { getLastTimeStr } from '@/utils/util';
 import { useStore } from 'vuex';
 import { IGlobalState } from '@/store';
@@ -78,41 +78,42 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const curReplyId = ref('');
-    const { token, userId } = store.state.user.userInfo;
+    const token = computed(() => store.state.user.userInfo.token);
+    const userId = computed(() => store.state.user.userInfo.userId);
     const handleReplyUps = async (reply: ITopicReply) => {
-      if (!token) {
+      if (!token.value) {
         Toast('你还没登录~~');
         router.push(`/login?redirect=${encodeURIComponent(route.path)}`);
         return;
       }
       try {
-        const res = await apiHandleReplyUps<IReplyUpsResponse>(token, reply.id);
+        const res = await apiHandleReplyUps<IReplyUpsResponse>(token.value, reply.id);
         if (res.action === 'down') {
-          const index = reply.ups.findIndex((i) => i === userId);
+          const index = reply.ups.findIndex((i) => i === userId.value);
           reply.ups.splice(index, 1);
         } else {
-          reply.ups.push(userId);
+          reply.ups.push(userId.value);
         }
       } catch (error) {
         Toast('点赞失败');
       }
     };
     const isUps = (reply: ITopicReply) => {
-      return reply.ups.findIndex((i) => i === userId) >= 0;
+      return reply.ups.findIndex((i) => i === userId.value) >= 0;
     };
     const hideItemReply = () => {
       curReplyId.value = '';
     }
     const addReply = (id: string) => {
+      if (!token.value) {
+        Toast('你还没登录~~');
+        router.push(`/login?redirect=${encodeURIComponent(route.path)}`);
+        return;
+      }
       if (id === curReplyId.value) {
         hideItemReply()
       } else {
         curReplyId.value = id;
-      }
-      if (!token) {
-        Toast('你还没登录~~');
-        router.push(`/login?redirect=${encodeURIComponent(route.path)}`);
-        return;
       }
     };
     return {
