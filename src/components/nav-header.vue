@@ -5,7 +5,7 @@
       <div v-else class="navbar-blank"></div>
       <div class="flex-1 navbar-title" v-text="title"></div>
       <slot name="collect"></slot>
-      <router-link :to="`/add/${topicId}`">
+      <router-link v-show="showAdd" :to="`/add/${topicId}`">
         <i class="iconfont navbar-icon-add">&#xe60f;</i>
       </router-link>
     </header>
@@ -39,6 +39,10 @@ export default defineComponent({
     topicId: {
       type: String,
       default: '',
+    },
+    showAdd: {
+      type: Boolean,
+      default: true,
     }
   },
   setup() {
