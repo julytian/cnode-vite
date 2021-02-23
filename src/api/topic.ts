@@ -9,6 +9,20 @@ export function apiGetTopicDetail<T>(id: string) {
 }
 
 /**
+ * 新建评论
+ * @param params 评论参数对象
+ * {
+ *  accesstoken: '',
+ *  content: '',
+ *  reply_id: '',
+ *  topic_id: ''
+ * }
+ */
+export function apiAddTopicReplies<T>(params: IAddTopicRepliesParams) {
+  return axios.post<T, T>(`/topic/${params.topic_id}/replies`, params);
+}
+
+/**
  * 为评论点赞
  * @param accesstoken 主题accesstoken
  * @param reply_id 主题reply_id
