@@ -22,16 +22,16 @@ import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'NavUser',
-  setup() {
+  emits: ['goPage'],
+  setup(props, context) {
     const store = useStore<IGlobalState>();
-    const router = useRouter();
     const route = useRoute();
     const userInfo = computed(() => store.state.user.userInfo);
     const goLogin = () => {
-      router.push(`/login?redirect=${encodeURIComponent(route.path)}`);
+      context.emit('goPage', `/login?redirect=${encodeURIComponent(route.path)}`)
     };
     const goUser = () => {
-      router.push(`/user/${userInfo.value.loginname}`);
+      context.emit('goPage', `/user/${userInfo.value.loginname}`)
     };
     return {
       userInfo,

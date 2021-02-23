@@ -1,6 +1,6 @@
 <template>
   <section class="nav-menu">
-    <nav-user></nav-user>
+    <nav-user @go-page="goPage"></nav-user>
     <section class="nav-menu-list">
       <a
         class="icon-quanbu iconfont nav-menu-item"
@@ -54,11 +54,15 @@ export default defineComponent({
   components: {
     NavUser,
   },
-  emits: ['hideMenu'],
+  props: {
+    show: {
+      type: Boolean,
+    }
+  },
   setup(props, context) {
     const router = useRouter();
     const goPage = (url: string) => {
-      context.emit('hideMenu');
+      context.emit('update:show', false);
       router.push(url);
     };
     return {

@@ -10,7 +10,7 @@
     </header>
   </van-sticky>
   <van-popup v-model:show="show" position="left" teleport="body">
-    <nav-menu @hide-menu="show=false"></nav-menu>
+    <nav-menu v-model:show="show"></nav-menu>
   </van-popup>
 </template>
 
