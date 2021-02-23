@@ -39,7 +39,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "about" */ '../views/about/index.vue'),
   },
   {
-    path: '/add',
+    path: '/add/:id?',
     name: 'Add',
     component: () => import(/* webpackChunkName: "add" */ '../views/add/index.vue'),
     meta: { requiresAuth: true },
