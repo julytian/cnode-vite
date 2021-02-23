@@ -1,5 +1,5 @@
 <template>
-  <nav-header title="主题"></nav-header>
+  <nav-header :title="title"></nav-header>
   <div class="d-flex align-items-center van-hairline--bottom add-hd">
     <span>选择分类：</span>
     <div class="flex-1">
@@ -7,7 +7,7 @@
         <van-dropdown-item v-model="topic.tab" :options="topic.options" />
       </van-dropdown-menu>
     </div>
-    <div class="submit-btn" @click="submit">发布</div>
+    <div class="submit-btn" @click="submit">{{ btnText }}</div>
   </div>
   <div class="add-title van-hairline--bottom">
     <van-field
@@ -28,16 +28,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue';
-import { DropdownMenu, DropdownItem, Field, Toast } from 'vant';
-import NavHeader from '@/components/nav-header.vue';
-import { useStore } from 'vuex';
-import { IGlobalState } from '@/store';
-import { apiAddTopics } from '@/api/add'
-import { useRouter } from 'vue-router';
+import { computed, defineComponent, onActivated, reactive, ref } from "vue";
+import { DropdownMenu, DropdownItem, Field, Toast } from "vant";
+import NavHeader from "@/components/nav-header.vue";
+import { useStore } from "vuex";
+import { IGlobalState } from "@/store";
+import { apiAddTopics, apiUpdateTopics } from "@/api/add";
+import { useRoute, useRouter } from "vue-router";
+import * as Types from "@/store/action-types";
+import { apiGetTopicDetail } from "@/api/topic";
 
 export default defineComponent({
-  name: 'AddPage',
+  name: "AddPage",
   components: {
     [DropdownMenu.name]: DropdownMenu,
     [DropdownItem.name]: DropdownItem,
@@ -45,48 +47,76 @@ export default defineComponent({
     NavHeader,
   },
   setup() {
-    const store = useStore<IGlobalState>()
-    const router = useRouter()
+    const store = useStore<IGlobalState>();
+    const router = useRouter();
+    const title = ref("");
+    const topicId = useRoute().params?.id as string;
+    const btnText = topicId ? "更新" : "发布";
     const topic = reactive({
-      tab: 'dev',
+      tab: "dev",
       options: [
-        { text: '测试', value: 'dev' },
-        { text: '分享', value: 'share' },
-        { text: '问答', value: 'ask' },
-        { text: '招聘', value: 'job' },
+        { text: "测试", value: "dev" },
+        { text: "分享", value: "share" },
+        { text: "问答", value: "ask" },
+        { text: "招聘", value: "job" },
       ],
-      title: '',
-      content: '',
+      title: "",
+      content: "",
+    });
+    onActivated(() => {
+      if (topicId) {
+        title.value = "编辑主题";
+        apiGetTopicDetail<ITopicDetail>(topicId, false).then(
+          (res: ITopicDetail) => {
+            topic.title = res.title;
+            topic.content = res.content;
+            topic.tab = res.tab;
+          }
+        );
+      } else {
+        title.value = "添加主题";
+      }
     });
     const submit = async () => {
       if (!topic.title) {
-        Toast('标题不能为空')
-        return
+        Toast("标题不能为空");
+        return;
       }
       if (!topic.content) {
-        Toast('内容不能为空')
-        return
+        Toast("内容不能为空");
+        return;
       }
       const params: IAddTopicParams = {
         accesstoken: store.state.user.userInfo.token,
         title: topic.title,
         tab: topic.tab as TTopicTab,
         content: topic.content,
-      }
+      };
       try {
-        const res = await apiAddTopics<IAddTopicResponse>(params);
-        if (res.success) {
-          Toast('发布成功');
-          router.replace(`/list?tab=${topic.tab}`);
+        if (topicId) {
+          params.topic_id = topicId;
+          const res = await apiUpdateTopics<IAddTopicResponse>(params);
+          if (res.success) {
+            Toast("更新成功");
+            store.dispatch(`topic/${Types.SET_TOPIC_DETAIL}`, { id: topicId });
+            router.back();
+          }
+        } else {
+          const res = await apiAddTopics<IAddTopicResponse>(params);
+          if (res.success) {
+            Toast("发布成功");
+            router.replace(`/list?tab=${topic.tab}`);
+          }
         }
       } catch (error) {
-        console.log('error', error);
-        Toast('发布失败');
+        Toast(topicId ? "更新失败" : "发布失败");
       }
-    }
+    };
     return {
       topic,
       submit,
+      title,
+      btnText,
     };
   },
 });
@@ -107,7 +137,7 @@ export default defineComponent({
   height: 30px !important;
 }
 .add-title ::v-deep(.van-cell) {
-  padding: $gap * 2 ;
+  padding: $gap * 2;
 }
 .add-content {
   margin: $gap * 2;
