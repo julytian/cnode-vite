@@ -1,5 +1,14 @@
 <template>
-  <nav-header title="主题"></nav-header>
+  <nav-header title="主题">
+    <template v-if="token" #collect>
+      <van-icon
+        name="like"
+        size="20"
+        :color="topic.is_collect ? '#80bd01' : '#000000'"
+        @click="toggleCollect(topic.is_collect)"
+      />
+    </template>
+  </nav-header>
   <h2 class="topic-title">{{ topic.title }}</h2>
   <van-skeleton title avatar :row="5" :loading="!topic.id" class="skeleton-top">
     <topic-info :topic="topic"></topic-info>
@@ -27,7 +36,7 @@ import {
   nextTick,
   onActivated,
 } from 'vue';
-import { Skeleton, ImagePreview } from 'vant';
+import { Skeleton, ImagePreview, Icon } from 'vant';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import NavHeader from '@/components/nav-header.vue';
@@ -35,6 +44,7 @@ import * as Types from '@/store/action-types';
 import { IGlobalState } from '@/store';
 
 import TopicInfo from './topic-info.vue';
+import { apiAddTopicCollect, apiDelTopicCollect } from '@/api/topic';
 
 function previewImage() {
   nextTick(() => {
@@ -62,6 +72,7 @@ export default defineComponent({
   name: 'TopicPage',
   components: {
     [Skeleton.name]: Skeleton,
+    [Icon.name]: Icon,
     NavHeader,
     TopicInfo,
     TopicReply: defineAsyncComponent(
@@ -76,6 +87,7 @@ export default defineComponent({
     const route = useRoute();
     const store = useStore<IGlobalState>();
     const topic = computed(() => store.state.topic.topic);
+    const token = computed(() => store.state.user.userInfo.token);
     onActivated(async () => {
       if (!topic.value.id) {
         await store.dispatch(
@@ -85,8 +97,24 @@ export default defineComponent({
       }
       previewImage();
     });
+    const toggleCollect = async (is_collect: boolean) => {
+      const id = route.params.id as string;
+      if (is_collect) {
+        const res:any = await apiDelTopicCollect(token.value, id);
+        if (res.success) {
+          topic.value.is_collect = false;
+        }
+      } else {
+        const res:any = await apiAddTopicCollect(token.value, id);
+        if (res.success) {
+          topic.value.is_collect = true;
+        }
+      }
+    };
     return {
       topic,
+      token,
+      toggleCollect,
     };
   },
 });

@@ -4,6 +4,7 @@
       <div v-if="showMenu" class="navbar-icon-menu" @click="showMenu"></div>
       <div v-else class="navbar-blank"></div>
       <div class="flex-1 navbar-title" v-text="title"></div>
+      <slot name="collect"></slot>
       <router-link to="/add">
         <i class="iconfont navbar-icon-add">&#xe60f;</i>
       </router-link>
