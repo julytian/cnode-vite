@@ -4,8 +4,12 @@
     <dt>关于项目</dt>
     <dd>该项目是基于Cnodejs的api，采用vue3+vite重写的webapp。</dd>
 
-    <dt>源码地址</dt>
+    <dt>预览地址</dt>
+    <dd>
+      <a href="https://cnode-vite.vercel.app">https://cnode-vite.vercel.app</a>
+    </dd>
 
+    <dt>源码地址</dt>
     <dd>
       <a href="https://github.com/julytian/cnode-vite.git">
         https://github.com/julytian/cnode-vite.git</a
