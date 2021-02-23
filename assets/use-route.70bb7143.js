@@ -1,0 +1,1 @@
+import{y as r}from"./index.1390daae.js";var a={to:[String,Object],url:String,replace:Boolean};function e(r){var a=r.$router,e=r.to,o=r.url,t=r.replace;e&&a?a[t?"replace":"push"](e):o&&(t?location.replace(o):location.href=o)}function o(){var a=r().proxy;return function(){e(a)}}export{a,e as r,o as u};
