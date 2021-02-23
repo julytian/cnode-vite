@@ -65,7 +65,11 @@ export default defineComponent({
         const imgs = document.querySelectorAll(".markdown-body img");
         const images: string[] = [];
         imgs.forEach((img, index) => {
-          images.push(img.getAttribute("src") as string);
+          let url = img.getAttribute("src") as string;
+          if (!url.startsWith('http')) {
+            url = `https:${url}`; 
+          }
+          images.push(url);
           img.addEventListener("click", () => {
             ImagePreview({
               images,
