@@ -26,60 +26,65 @@ import {
   defineComponent,
   nextTick,
   onMounted,
-} from "vue";
-import { Skeleton, ImagePreview } from "vant";
-import { useRoute } from "vue-router";
-import { useStore } from "vuex";
-import NavHeader from "@/components/nav-header.vue";
-import * as Types from "@/store/action-types";
-import { IGlobalState } from "@/store";
+} from 'vue';
+import { Skeleton, ImagePreview } from 'vant';
+import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
+import NavHeader from '@/components/nav-header.vue';
+import * as Types from '@/store/action-types';
+import { IGlobalState } from '@/store';
 
-import TopicInfo from "./topic-info.vue";
+import TopicInfo from './topic-info.vue';
 
 export default defineComponent({
-  name: "TopicPage",
+  name: 'TopicPage',
   components: {
     [Skeleton.name]: Skeleton,
     NavHeader,
     TopicInfo,
     TopicReply: defineAsyncComponent(
-      () => import(/* webpackChunkName: "topic-reply" */ "./topic-reply.vue")
+      () => import(/* webpackChunkName: "topic-reply" */ './topic-reply.vue')
     ),
     BackTop: defineAsyncComponent(
       () =>
-        import(/* webpackChunkName: "backtop" */ "@/components/back-top.vue")
+        import(/* webpackChunkName: "backtop" */ '@/components/back-top.vue')
     ),
   },
   setup() {
     const route = useRoute();
     const store = useStore<IGlobalState>();
     const topic = computed(() => store.state.topic.topic);
+    const previewImage = () => {
+      nextTick(() => {
+        const imgs = document.querySelectorAll('.markdown-body img');
+        const images: string[] = [];
+        imgs.forEach((img, index) => {
+          let url = img.getAttribute('src') as string;
+          if (!url.startsWith('http')) {
+            url = `https:${url}`;
+          }
+          images.push(url);
+          img.addEventListener('click', () => {
+            ImagePreview({
+              images,
+              startPosition: index,
+              closeable: true,
+              teleport: 'body',
+            });
+          });
+        });
+      });
+    };
     onMounted(async () => {
       if (!topic.value.id) {
         await store.dispatch(
           `topic/${Types.SET_TOPIC_DETAIL}`,
           route.params?.id
         );
+        previewImage();
+      } else {
+        previewImage();
       }
-      nextTick(() => {
-        const imgs = document.querySelectorAll(".markdown-body img");
-        const images: string[] = [];
-        imgs.forEach((img, index) => {
-          let url = img.getAttribute("src") as string;
-          if (!url.startsWith('http')) {
-            url = `https:${url}`; 
-          }
-          images.push(url);
-          img.addEventListener("click", () => {
-            ImagePreview({
-              images,
-              startPosition: index,
-              closeable: true,
-              teleport: 'body'
-            });
-          });
-        });
-      });
     });
     return {
       topic,
