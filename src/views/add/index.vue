@@ -1,5 +1,5 @@
 <template>
-  <nav-header :title="title"></nav-header>
+  <nav-header :title="title" :show-add="false"></nav-header>
   <div class="d-flex align-items-center van-hairline--bottom add-hd">
     <span>选择分类：</span>
     <div class="flex-1">
@@ -50,8 +50,8 @@ export default defineComponent({
     const store = useStore<IGlobalState>();
     const router = useRouter();
     const title = ref("");
-    const topicId = useRoute().params?.id as string;
-    const btnText = topicId ? "更新" : "发布";
+    const topicId = computed(() => (useRoute().params?.id || '') as string)
+    const btnText = topicId.value ? "更新" : "发布";
     const topic = reactive({
       tab: "dev",
       options: [
@@ -64,9 +64,9 @@ export default defineComponent({
       content: "",
     });
     onActivated(() => {
-      if (topicId) {
+      if (topicId.value) {
         title.value = "编辑主题";
-        apiGetTopicDetail<ITopicDetail>(topicId, false).then(
+        apiGetTopicDetail<ITopicDetail>(topicId.value, false).then(
           (res: ITopicDetail) => {
             topic.title = res.title;
             topic.content = res.content;
@@ -94,11 +94,11 @@ export default defineComponent({
       };
       try {
         if (topicId) {
-          params.topic_id = topicId;
+          params.topic_id = topicId.value;
           const res = await apiUpdateTopics<IAddTopicResponse>(params);
           if (res.success) {
             Toast("更新成功");
-            store.dispatch(`topic/${Types.SET_TOPIC_DETAIL}`, { id: topicId });
+            store.dispatch(`topic/${Types.SET_TOPIC_DETAIL}`, { id: topicId.value });
             router.back();
           }
         } else {
@@ -109,7 +109,7 @@ export default defineComponent({
           }
         }
       } catch (error) {
-        Toast(topicId ? "更新失败" : "发布失败");
+        Toast(topicId.value ? "更新失败" : "发布失败");
       }
     };
     return {
