@@ -89,10 +89,11 @@ export default defineComponent({
     const topic = computed(() => store.state.topic.topic);
     const token = computed(() => store.state.user.userInfo.token);
     onActivated(async () => {
-      if (!topic.value.id) {
+      const id = route.params.id as string;
+      if (!topic.value.id || (topic.value.id !== id)) {
         await store.dispatch(
           `topic/${Types.SET_TOPIC_DETAIL}`,
-          route.params?.id
+          id
         );
       }
       previewImage();
