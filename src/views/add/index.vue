@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive } from 'vue';
 import { DropdownMenu, DropdownItem, Field, Toast } from 'vant';
 import NavHeader from '@/components/nav-header.vue';
 import { useStore } from 'vuex';
