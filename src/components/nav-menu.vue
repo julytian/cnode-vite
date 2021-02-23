@@ -40,14 +40,20 @@
       <a class="icon-about iconfont nav-menu-item" @click="goPage('/about')"
         >关于</a
       >
+      <a v-if="token" class="icon-shezhi iconfont nav-menu-item line" @click="logout"
+        >退出</a
+      >
     </section>
   </section>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import NavUser from '@/components/nav-user.vue';
+import { useStore } from 'vuex';
+import { IGlobalState } from '@/store';
+import { SET_USER_INFO } from '@/store/action-types';
 
 export default defineComponent({
   name: 'NavMenu',
@@ -57,16 +63,26 @@ export default defineComponent({
   props: {
     show: {
       type: Boolean,
-    }
+    },
   },
   setup(props, context) {
+    const store = useStore<IGlobalState>();
     const router = useRouter();
+    const token = computed(() => store.state.user.userInfo.token);
     const goPage = (url: string) => {
       context.emit('update:show', false);
       router.push(url);
     };
+    const logout = () => {
+      context.emit('update:show', false);
+      window.sessionStorage.removeItem('user');
+      store.dispatch(`user/${SET_USER_INFO}`, {});
+      router.replace('/list')
+    };
     return {
       goPage,
+      logout,
+      token,
     };
   },
 });
