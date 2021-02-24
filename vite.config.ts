@@ -4,10 +4,10 @@ import { resolve } from 'path'
 import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
-export default ({command}: ConfigEnv):UserConfig => {
+export default ({command, mode}: ConfigEnv):UserConfig => {
   const isBuild = command === 'build';
   return {
-    // base: isBuild ? '/cnode-vite/': '/',
+    base: (isBuild && mode === 'github-page') ? '/cnode-vite/': '/',
     plugins: [
       vue(),
     ],
