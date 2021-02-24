@@ -6,6 +6,8 @@ import * as Types from "../action-types";
 interface ITopicDetailPayload {
   id: string;
   mdrender?: boolean;
+  reload?: boolean;
+  token?: string;
 }
 
 const initialState: ITopicDetailState = {
@@ -20,10 +22,12 @@ const topic: Module<ITopicDetailState, IGlobalState> = {
     },
   },
   actions: {
-    async [Types.SET_TOPIC_DETAIL]({ commit }, payload: ITopicDetailPayload) {
-      commit(Types.SET_TOPIC_DETAIL, {});
+    async [Types.SET_TOPIC_DETAIL]({ commit }, payload: ITopicDetailPayload) {      
+      if (!payload.reload) {
+        commit(Types.SET_TOPIC_DETAIL, {});
+      }
       try {
-        const res = await apiGetTopicDetail(payload.id, payload.mdrender);
+        const res = await apiGetTopicDetail(payload.id, payload.mdrender, payload.token);
         commit(Types.SET_TOPIC_DETAIL, res);
       } catch (error) {
         //
