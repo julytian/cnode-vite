@@ -19,9 +19,8 @@ import { Field, Toast } from 'vant';
 import { useStore } from 'vuex';
 import { IGlobalState } from '@/store';
 import { apiAddTopicReplies } from '@/api/topic';
-import { linkUsers } from '@/utils/util';
-import marked from 'marked';
 import { useRoute } from 'vue-router';
+import { SET_TOPIC_DETAIL } from '@/store/action-types';
 
 export default defineComponent({
   name: 'AddReply',
@@ -47,13 +46,13 @@ export default defineComponent({
       default: false,
     },
   },
-  emits: ['hideItemReply'],
+  emits: ['hideItemReply', 'onReload'],
   setup(props, { emit }) {
     const store = useStore<IGlobalState>();
     const route = useRoute();
     const content = ref('');
     const { topic, replyTo, replyId, show } = props;
-    const { token, loginname, avatar_url } = store.state.user.userInfo;
+    const { token } = store.state.user.userInfo;
     if (replyTo) {
       content.value = `@${replyTo}`;
     }
@@ -73,23 +72,7 @@ export default defineComponent({
       try {
         const res: IAddTopicRepliesResponse = await apiAddTopicReplies(params);
         if (res.success) {
-          console.log('xxxxxx', content.value);
-          const linkUsersStr = linkUsers(content.value);
-          const htmlText = marked(linkUsersStr);
-          const replyContent = `<div class="markdown-text">${htmlText}</div>`;
-          topic.replies.push({
-            id: res.reply_id,
-            author: {
-              loginname,
-              avatar_url,
-            },
-            content: replyContent,
-            ups: [],
-            create_at: `${new Date()}`,
-            is_uped: false,
-            reply_id: '',
-          });
-          console.log('topic xxxxxx', topic);
+          store.dispatch(`topic/${SET_TOPIC_DETAIL}`, { id: topic.id, reload: true, token })
         }
         content.value = '';
         if (show) {
