@@ -66,7 +66,7 @@ export default defineComponent({
     onActivated(() => {
       if (topicId.value) {
         title.value = "编辑主题";
-        apiGetTopicDetail<ITopicDetail>(topicId.value, false).then(
+        apiGetTopicDetail<ITopicDetail>(topicId.value, false, store.state.user.userInfo.token).then(
           (res: ITopicDetail) => {
             topic.title = res.title;
             topic.content = res.content;

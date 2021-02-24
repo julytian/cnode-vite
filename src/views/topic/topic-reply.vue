@@ -24,7 +24,7 @@
           >
         </div>
       </div>
-      <div class="markdown-body reply-content" v-html="item.content"></div>
+      <div class="markdown-body reply-content" v-html="handleHtmlContent(item.content)"></div>
       <template v-if="userId && curReplyId === item.id">
         <reply
           v-model:topic="topic"
@@ -116,6 +116,9 @@ export default defineComponent({
         curReplyId.value = id;
       }
     };
+    const handleHtmlContent = (content: string) => {
+      return content.replace(/\/user\//, '#/user/');
+    }
     return {
       handleReplyUps,
       isUps,
@@ -123,6 +126,7 @@ export default defineComponent({
       curReplyId,
       addReply,
       hideItemReply,
+      handleHtmlContent,
     };
   },
 });

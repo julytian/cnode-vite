@@ -64,7 +64,7 @@ export default defineComponent({
     };
     const goDetail = (item: ITopic) => {
       router.push(`/topic/${item.id}`);
-      store.dispatch(`topic/${Types.SET_TOPIC_DETAIL}`, { id: item.id });
+      store.dispatch(`topic/${Types.SET_TOPIC_DETAIL}`, { id: item.id, token: store.state.user.userInfo.token });
     };
     return {
       skeletonLoading,

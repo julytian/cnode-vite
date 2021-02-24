@@ -40,7 +40,7 @@ export default defineComponent({
     const router = useRouter();
     const goDetail = (item: IUserRecent) => {
       router.push(`/topic/${item.id}`);
-      store.dispatch(`topic/${Types.SET_TOPIC_DETAIL}`, { id: item.id });
+      store.dispatch(`topic/${Types.SET_TOPIC_DETAIL}`, { id: item.id, token: store.state.user.userInfo.token });
     };
     const goUser = (item: IUserRecent) => {
       router.push(`/user/${item.author.loginname}`);
