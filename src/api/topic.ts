@@ -1,14 +1,10 @@
-import { IGlobalState } from '@/store';
-import { useStore } from 'vuex';
 import axios from './axios';
 
 /**
  * 获取主题详情
  * @param id 主题id
  */
-export function apiGetTopicDetail<T>(id: string, mdrender = true) {
-  const store = useStore<IGlobalState>();
-  const token = store.state.user.userInfo.token;
+export function apiGetTopicDetail<T>(id: string, mdrender = true, token = '') {
   let url = `/topic/${id}?mdrender=${mdrender}`;
   if (token) {
     url += `&accesstoken=${token}`;
